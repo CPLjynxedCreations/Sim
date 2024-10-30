@@ -14,8 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Sim.Pages;
 using Sim.Scripts;
-using Sim.Windows;
 
 namespace Sim
 {
@@ -25,11 +25,10 @@ namespace Sim
     public partial class MainWindow : Window
     {
         Controller controller;
-        PayWindow payWindow = new PayWindow();
 
         public string strMoney;
         public decimal decMoney;
-        public decimal decPay = (decimal)20.50;
+        public decimal decPay;// = (decimal)20.50;
 
         public string strCurrentJob;
 
@@ -38,10 +37,12 @@ namespace Sim
         public MainWindow()
         {
             InitializeComponent();
+            lblAddMoneyAmount.Visibility = Visibility.Hidden;
             controller = new Controller();
             controller.CreateControllerFile();
-            lblJob.Text = controller.strCurrentJob;
-            InitializeTimer();
+            controller.ReadControllerFile();
+            ShowLabels();
+            InitializeTimers();
             mainWindowFrame.Navigate(new Uri("Pages/HomePage.xaml", UriKind.Relative));
         }
 
@@ -53,40 +54,56 @@ namespace Sim
         {
             mainWindowFrame.Navigate(new Uri("Pages/JobPage.xaml", UriKind.Relative));
         }
+        private void OnStatsClick(object sender, RoutedEventArgs e)
+        {
+            mainWindowFrame.Navigate(new Uri("Pages/StatsPage.xaml", UriKind.Relative));
+        }
 
 
-        private void InitializeTimer()
+        private void InitializeTimers()
         {
             System.Timers.Timer timPay = new System.Timers.Timer(10000);
-            timPay.Elapsed += OnTimedEvent;
+            timPay.Elapsed += GetPaid;
             timPay.AutoReset = true;
             timPay.Enabled = true;
+
+            System.Timers.Timer timPayed = new System.Timers.Timer(11000);
+            timPayed.Elapsed += BeenPaid;
+            timPayed.AutoReset = true;
+            timPayed.Enabled = true;
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void ShowLabels()
         {
-            getPaid();
+            lblMoney.Text = controller.strCurrentPlayerMoney;
         }
 
-        public void GetPaid()
+        private void GetPaid(Object source, ElapsedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            controller.ReadControllerFile();
+            if (controller.strCurrentJob != "No Job")
+            {
+                Application.Current.Dispatcher.Invoke(() =>
             {
                 decMoney = Convert.ToDecimal(Convert.ToString(lblMoney.Text));
+                decPay = Convert.ToDecimal(controller.strPlayerIncome);
                 decMoney = decMoney + decPay;
                 strMoney = decMoney.ToString();
                 lblMoney.Text = strMoney;
-
-                if (payWindow.Owner != this)
-                {
-                    payWindow.Owner = this;
-
-                }
-                payWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                payWindow.btnOk.Click += (sender, e) => { payWindow.Close(); };
-                payWindow.lblPayLabel.Text = "You've been paid " + decPay + "!";
-                payWindow.Show();
+                controller.strCurrentPlayerMoney = decMoney.ToString();
+                controller.UpDateControllerFile();
+                lblAddMoneyAmount.Text = "+" + decPay.ToString();
+                lblAddMoneyAmount.Visibility = Visibility.Visible;
             });
+            }
+        }
+
+        private void BeenPaid(Object source, ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+        {
+            lblAddMoneyAmount.Visibility = Visibility.Hidden;
+        });
         }
     }
 }

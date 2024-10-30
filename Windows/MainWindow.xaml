@@ -13,22 +13,24 @@
             <RowDefinition Height="600"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Rectangle Fill="Green" Stroke="Black" StrokeThickness="5" Grid.Row="0"/>
-        <Rectangle Fill="Green" Grid.Row="2"/>
+        <Rectangle Fill="Purple" Stroke="Black" StrokeThickness="5" Grid.Row="0"/>
+        <Rectangle Fill="Purple" Grid.Row="2"/>
         <Frame x:Name="mainWindowFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
         <TextBlock x:Name="lblMoney"
-                   Text="00.30" Margin="0,0,10,0"
+                   Text="00.00" Margin="0,30,15,0"
                    HorizontalAlignment="Right" VerticalAlignment="Center"
                    FontSize="36" FontWeight="UltraBlack"/>
-        <TextBlock x:Name="lblJob"
-                   Text="Job" Margin="10,0,0,0"
-                   HorizontalAlignment="Left" VerticalAlignment="Center"
-                   FontSize="36" FontWeight="UltraBlack"/>
+        <TextBlock x:Name="lblAddMoneyAmount"
+                   Text="00.00" Margin="0,5,15,0"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   FontSize="36" FontWeight="UltraBlack" Foreground="LimeGreen"/>
         <StackPanel x:Name="StkBottomPanel" Orientation="Horizontal" Grid.Row="2">
             <Button x:Name="btnHome" Content="HOME" Width="100" Height="100" Click="OnHomeClick"/>
             <Button x:Name="btnShop" Content="SHOP" Width="100" Height="100"/>
             <Button x:Name="btnInventory" Content="INVENTORY" Width="100" Height="100"/>
             <Button x:Name="btnJob" Content="JOB" Width="100" Height="100" Click="OnJobsClick"/>
+            <Button x:Name="btn5" Content="empty" Width="100" Height="100"/>
+            <Button x:Name="btnStats" Content="Stats" Width="100" Height="100" Click="OnStatsClick"/>
         </StackPanel>
     </Grid>
 </Window>

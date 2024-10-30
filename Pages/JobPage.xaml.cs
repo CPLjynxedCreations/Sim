@@ -27,7 +27,9 @@ namespace Sim.Pages
         Controller controller;
 
         string strNewJob;
-        
+        public decimal decIncome;
+        public string strIncome;
+
 
         public JobPage()
         {
@@ -40,9 +42,29 @@ namespace Sim.Pages
             mWindow = (MainWindow)Application.Current.MainWindow;
             Button btnJobPressed = (Button)sender;
             strNewJob = Convert.ToString(btnJobPressed.Content);
-            controller.strNewJob = strNewJob;
+            controller.strCurrentJob = strNewJob;
+            controller.strCurrentPlayerMoney = mWindow.lblMoney.Text.ToString();
+            if (strNewJob == "Police")
+            {
+                decIncome = (decimal)50.70;
+                controller.strPlayerIncome = decIncome.ToString();
+            }
+            if (strNewJob == "Fire Fighter")
+            {
+                decIncome = (decimal)30.00;
+                controller.strPlayerIncome = decIncome.ToString();
+            }
+            if (strNewJob == "Paramedic")
+            {
+                decIncome = (decimal)24.30;
+                controller.strPlayerIncome = decIncome.ToString();
+            }
+            if (strNewJob == "Army")
+            {
+                decIncome = (decimal)76.80;
+                controller.strPlayerIncome = decIncome.ToString();
+            }
             controller.UpDateControllerFile();
-            mWindow.lblJob.Text = strNewJob;
         }
     }
 }

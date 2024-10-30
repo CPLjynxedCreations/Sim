@@ -11,11 +11,9 @@ namespace Sim.Scripts
     {
         const string controllerFileName = "ControllerFile.dat";
 
-        public string strNewJob;
         public string strCurrentJob;
-        //set pay amount for each job
-        //when job selected save amount with job
-        //go to main. get amount and add to timer for amount paid
+        public string strPlayerIncome;
+        public string strCurrentPlayerMoney;
 
         public void CreateControllerFile()
         {
@@ -25,13 +23,11 @@ namespace Sim.Scripts
                 {
                     using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
                     {
+                        writer.Write("00.00");
+                        writer.Write("00.00");
                         writer.Write("No Job");
                     }
                 }
-            }
-            else
-            {
-                ReadControllerFile();
             }
         }
         public void UpDateControllerFile()
@@ -42,7 +38,9 @@ namespace Sim.Scripts
                 {
                     using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
                     {
-                        writer.Write(strNewJob);
+                        writer.Write(strCurrentPlayerMoney);
+                        writer.Write(strPlayerIncome);
+                        writer.Write(strCurrentJob);
                     }
                 }
             }
@@ -56,6 +54,8 @@ namespace Sim.Scripts
                 {
                     using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
                     {
+                        strCurrentPlayerMoney = reader.ReadString();
+                        strPlayerIncome = reader.ReadString();
                         strCurrentJob = reader.ReadString();
                     }
                 }
